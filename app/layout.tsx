@@ -1,7 +1,6 @@
 import Footer from "components/layout/footer";
 import { Navbar } from "components/layout/navbar";
 import PageTransition from "components/layout/page-transition";
-import { WelcomeToast } from "components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
 import { baseUrl } from "lib/utils";
 import { ReactNode, Suspense } from "react";
@@ -54,7 +53,7 @@ export default function RootLayout({
               </PageTransition>
 
               <Toaster closeButton />
-              <WelcomeToast />
+            {/* WelcomeToast is gone */}
             </main>
 
             <Footer />
