@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/container-queries";
+@plugin "@tailwindcss/typography";
+
+/* -------------------------------------------------------------------------- */
+/* 1. BRAND TOKENS                                                             */
+/* -------------------------------------------------------------------------- */
+:root {
+  --brand-purple: #411b3f;
+  --brand-teal: #102f35;
+  --header-bg: var(--brand-purple);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. BASE THEME OVERRIDES (CONTROLLED & SAFE)                                 */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  /* Header / Navbar */
+  nav {
+    background-color: var(--header-bg);
+  }
+
+  nav a,
+  nav button,
+  nav span {
+    color: white;
+  }
+
+  /* Prevent nav overrides from leaking into the site */
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  /* Buttons */
+  button.primary {
+    background-color: #3b1438;
+    color: white;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. LOGO NORMALIZATION                                                       */
+/* -------------------------------------------------------------------------- */
+/* Ensures dark logo renders correctly on dark header */
+nav img {
+  filter: brightness(0) invert(1);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. DESKTOP MEGA MENU (DROPDOWN SYSTEM)                                      */
+/* -------------------------------------------------------------------------- */
+
+/* Dropdown container */
+.dropdown-panel {
+  @apply bg-[#411b3f] border border-white/10 shadow-2xl;
+}
+
+/* Section headings */
+.dropdown-heading {
+  @apply mb-8 pb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-white border-b border-white/10;
+}
+
+/* Links */
+.dropdown-link {
+  @apply block mb-3 text-[11px] uppercase tracking-widest text-white/60 transition-colors hover:text-white;
+}
+
+/* Optional: add subtle hover indent */
+.dropdown-link:hover {
+  transform: translateX(2px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. MOBILE MENU + FILTER DROPDOWNS                                           */
+/* -------------------------------------------------------------------------- */
+
+/* Mobile dropdown / filter panels */
+.mobile-dropdown,
+.filter-dropdown {
+  @apply bg-[#411b3f] text-white border border-white/10 shadow-xl;
+}
+
+/* Mobile dropdown items */
+.mobile-dropdown a,
+.filter-dropdown a {
+  @apply text-white/80 hover:text-white;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. TYPOGRAPHY REFINEMENTS                                                   */
+/* -------------------------------------------------------------------------- */
+.prose {
+  --tw-prose-body: theme(colors.neutral.600);
+  --tw-prose-headings: theme(colors.neutral.900);
+}
+
+.dark .prose {
+  --tw-prose-body: theme(colors.neutral.400);
+  --tw-prose-headings: theme(colors.neutral.100);
+}
