@@ -1,14 +1,20 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  // In Next 16, this is a top-level flag, not inside experimental
+  cacheComponents: true, 
+  
   typescript: {
-    // Allows build to continue even with minor type mismatches
+    // Keeps build running despite small type mismatches
     ignoreBuildErrors: true,
   },
+
   experimental: {
     inlineCss: true,
-    // This is the specific flag required to use the "use cache" directive
-    dynamicIO: true, 
+    // We removed 'dynamicIO' (it's now cacheComponents)
+    // We removed 'cacheHandlers: true' (it's for custom Redis/KV objects)
   },
+
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
