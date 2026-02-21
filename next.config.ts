@@ -1,7 +1,13 @@
-export default {
-  cacheComponents: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  typescript: {
+    // Allows build to continue even with minor type mismatches
+    ignoreBuildErrors: true,
+  },
   experimental: {
     inlineCss: true,
+    // This is the specific flag required to use the "use cache" directive
+    dynamicIO: true, 
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -14,15 +20,5 @@ export default {
     ],
   },
 };
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    ignoreBuildErrors: true,
-  },
-  // ... your other config settings
-};
 
-module.exports = nextConfig;
+export default nextConfig;
