@@ -4,6 +4,7 @@ const cartFragment = /* GraphQL */ `
   fragment cart on Cart {
     id
     checkoutUrl
+    totalQuantity
     cost {
       subtotalAmount {
         amount
@@ -45,7 +46,6 @@ const cartFragment = /* GraphQL */ `
         }
       }
     }
-    totalQuantity
   }
   ${productFragment}
 `;

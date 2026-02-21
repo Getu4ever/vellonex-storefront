@@ -201,18 +201,18 @@ export default function CartModal() {
                                 />
 
                                 <div className="ml-auto flex h-9 items-center rounded-full border border-neutral-200 dark:border-neutral-700">
-                                  <EditItemQuantityButton
-                                    item={item}
-                                    type="minus"
-                                    optimisticUpdate={updateCartItem}
-                                  />
+                                <EditItemQuantityButton
+                                item={item}
+                                type="minus"
+                                optimisticUpdateAction={updateCartItem}  // ← renamed prop
+/>
                                   <span className="w-6 text-center text-sm">
                                     {item.quantity}
                                   </span>
                                   <EditItemQuantityButton
                                     item={item}
                                     type="plus"
-                                    optimisticUpdate={updateCartItem}
+                                  optimisticUpdateAction={updateCartItem}  // ← renamed prop}
                                   />
                                 </div>
                               </div>
