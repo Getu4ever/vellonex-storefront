@@ -202,10 +202,10 @@ export default function CartModal() {
 
                                 <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
   <EditItemQuantityButton
-  item={item}
-  type="minus" 
-  optimisticUpdateAction={updateCartItem} // Ensure "Action" is at the end
-/>
+    item={item}
+    type="minus"
+    optimisticUpdateAction={updateCartItem}
+  />
   <p className="w-6 text-center">
     <span className="w-full text-sm">
       {item.quantity}
@@ -214,7 +214,7 @@ export default function CartModal() {
   <EditItemQuantityButton
     item={item}
     type="plus"
-    optimisticUpdateAction={updateCartItem}  // ← FIXED
+    optimisticUpdateAction={updateCartItem}
   />
 </div>
                               </div>
