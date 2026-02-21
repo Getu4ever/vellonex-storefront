@@ -2,7 +2,7 @@
 
 import type {
   Cart,
-  CartItem,
+  CartLine,
   Product,
   ProductVariant,
 } from "lib/shopify/types";
@@ -37,14 +37,14 @@ function calculateItemCost(quantity: number, price: string): string {
 }
 
 function updateCartItem(
-  item: CartItem,
+  item: CartLine,
   updateType: UpdateType,
-): CartItem | null {
+): CartLine | null {
   if (updateType === "delete") return null;
 
   const newQuantity =
     updateType === "plus" ? item.quantity + 1 : item.quantity - 1;
-  if (newQuantity === 0) return null;
+  if (newQuantity <= 0) return null;
 
   const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
   const newTotalAmount = calculateItemCost(
@@ -66,38 +66,31 @@ function updateCartItem(
 }
 
 function createOrUpdateCartItem(
-  existingItem: CartItem | undefined,
+  existingItem: CartLine | undefined,
   variant: ProductVariant,
   product: Product,
-): CartItem {
+): CartLine {
   const quantity = existingItem ? existingItem.quantity + 1 : 1;
   const totalAmount = calculateItemCost(quantity, variant.price.amount);
 
   return {
-    id: existingItem?.id,
+    id: existingItem?.id ?? `line-${variant.id}-${Date.now()}`, // safe fallback
     quantity,
     cost: {
       totalAmount: {
         amount: totalAmount,
-        currencyCode: variant.price.currencyCode,
+        currencyCode: variant.price.currencyCode ?? "USD", // safe fallback
       },
     },
     merchandise: {
-      id: variant.id,
-      title: variant.title,
-      selectedOptions: variant.selectedOptions,
-      product: {
-        id: product.id,
-        handle: product.handle,
-        title: product.title,
-        featuredImage: product.featuredImage,
-      },
+      ...variant, // ← spread the FULL variant (includes id, price, availableForSale, etc.)
+      // do NOT add extra 'product' field here – Shopify CartLine.merchandise is ProductVariant only
     },
   };
 }
 
 function updateCartTotals(
-  lines: CartItem[],
+  lines: CartLine[],
 ): Pick<Cart, "totalQuantity" | "cost"> {
   const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = lines.reduce(
@@ -118,7 +111,7 @@ function updateCartTotals(
 
 function createEmptyCart(): Cart {
   return {
-    id: undefined,
+    id: "",                          // ← fixed: empty string instead of undefined
     checkoutUrl: "",
     totalQuantity: 0,
     lines: [],
@@ -142,7 +135,7 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
             ? updateCartItem(item, updateType)
             : item,
         )
-        .filter(Boolean) as CartItem[];
+        .filter((item): item is CartLine => item !== null);
 
       if (updatedLines.length === 0) {
         return {
