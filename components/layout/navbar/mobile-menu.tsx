@@ -10,11 +10,12 @@ import { Menu } from "lib/shopify/types";
 import Search, { SearchSkeleton } from "./search";
 
 /* -------------------------------------------------------------------------- */
-/*                               FALLBACK LINKS                                */
+/* FALLBACK LINKS                                */
 /* -------------------------------------------------------------------------- */
 
+// Keeping this exactly as you requested
 const FALLBACK_MENU: Menu[] = [
-  { title: "Shop All", path: "/search/featured" },
+  { title: "Shop All", path: "/search" }, // Changed to /search to show all products
   { title: "Best Sellers", path: "/search/featured" },
   { title: "The Edit", path: "/edit" },
   { title: "Archive", path: "/search/archive" },
@@ -29,6 +30,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const openMobileMenu = () => setIsOpen(true);
   const closeMobileMenu = () => setIsOpen(false);
 
+  // We use the menu provided, or our fallback
   const resolvedMenu = menu.length ? menu : FALLBACK_MENU;
 
   /* Close menu on route change */
@@ -58,7 +60,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
 
       <Transition show={isOpen}>
         <Dialog onClose={closeMobileMenu} className="relative z-50">
-          {/* BACKDROP */}
           <Transition.Child
             as={Fragment}
             enter="transition-opacity duration-300"
@@ -71,7 +72,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
           </Transition.Child>
 
-          {/* PANEL */}
           <Transition.Child
             as={Fragment}
             enter="transition-transform duration-300"
@@ -83,7 +83,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
           >
             <Dialog.Panel className="fixed inset-y-0 left-0 w-full max-w-sm bg-[#411b3f] text-white flex flex-col px-6 pb-8">
               
-              {/* CLOSE */}
               <div className="flex justify-between items-center py-6">
                 <span className="text-xs tracking-widest uppercase text-white/60">
                   Menu
@@ -97,7 +96,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
                 </button>
               </div>
 
-              {/* SEARCH */}
               <div className="mb-8">
                 <Suspense fallback={<SearchSkeleton />}>
                   <Search />
@@ -118,7 +116,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
                 ))}
               </nav>
 
-              {/* FOOTER */}
               <div className="mt-auto pt-10 text-xs tracking-widest uppercase text-white/40">
                 Vellonex © {new Date().getFullYear()}
               </div>
