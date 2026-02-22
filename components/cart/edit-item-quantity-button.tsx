@@ -32,24 +32,27 @@ function SubmitButton({ type }: { type: "plus" | "minus" }) {
 export function EditItemQuantityButton({
   item,
   type,
-  optimisticUpdate,
+  optimisticUpdateAction,
 }: {
   item: CartLine;
   type: "plus" | "minus";
-  optimisticUpdate: any;
+  optimisticUpdateAction: (merchandiseId: string, updateType: "plus" | "minus" | "delete") => void;
 }) {
+  // Use useActionState to track the server action status
   const [message, formAction] = useActionState(updateItemQuantity, null);
-  const payload = {
-    merchandiseId: item.merchandise.id,
-    quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
-  };
-  const updateItemQuantityAction = formAction.bind(null, payload);
 
   return (
     <form
       action={async () => {
-        optimisticUpdate(payload.merchandiseId, type);
-        updateItemQuantityAction();
+        // 1. Run the UI update immediately (Optimistic UI)
+        optimisticUpdateAction(item.merchandise.id, type);
+
+        // 2. Pass the payload directly to the action as an object
+        // This matches the (prevState, payload) signature in actions.ts
+        await formAction({
+          merchandiseId: item.merchandise.id,
+          quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
+        });
       }}
     >
       <SubmitButton type={type} />
