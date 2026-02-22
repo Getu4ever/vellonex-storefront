@@ -1,10 +1,10 @@
 'use client'; // Required for interactive state
 
 import {
-    ChatBubbleLeftRightIcon,
-    CheckCircleIcon,
-    EnvelopeIcon,
-    PhoneIcon
+  ChatBubbleLeftRightIcon,
+  CheckCircleIcon,
+  EnvelopeIcon,
+  PhoneIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -53,9 +53,11 @@ export default function ContactPage() {
         </p>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-16">
-        {/* Contact Info (Left Side) */}
-        <div className="space-y-12">
+      {/* Added responsive horizontal padding to the main container */}
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-16 grid grid-cols-1 md:grid-cols-2 gap-16">
+        
+        {/* Contact Info (Left Side) - Pushed right with extra padding */}
+        <div className="space-y-12 pl-2 md:pl-12 lg:pl-20">
           <div>
             <h2 className="text-xl font-medium mb-6 uppercase tracking-wider text-[#3B1438]">Direct Contact</h2>
             <div className="space-y-6">
