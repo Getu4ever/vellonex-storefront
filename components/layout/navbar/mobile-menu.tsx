@@ -15,9 +15,9 @@ import Search, { SearchSkeleton } from "./search";
 
 const FALLBACK_MENU: Menu[] = [
   { title: "Shop All", path: "/search/featured" },
-  { title: "Best Sellers", path: "/search/best-sellers" },
+  { title: "Best Sellers", path: "/search/featured" },
   { title: "The Edit", path: "/edit" },
-  { title: "Archive", path: "/archive" },
+  { title: "Archive", path: "/search/archive" },
   { title: "About", path: "/about-us" },
 ];
 
