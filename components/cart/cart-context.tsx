@@ -74,17 +74,16 @@ function createOrUpdateCartItem(
   const totalAmount = calculateItemCost(quantity, variant.price.amount);
 
   return {
-    id: existingItem?.id ?? `line-${variant.id}-${Date.now()}`, // safe fallback
+    id: existingItem?.id ?? `line-${variant.id}-${Date.now()}`,
     quantity,
     cost: {
       totalAmount: {
         amount: totalAmount,
-        currencyCode: variant.price.currencyCode ?? "USD", // safe fallback
+        currencyCode: variant.price.currencyCode,
       },
     },
     merchandise: {
-      ...variant, // ← spread the FULL variant (includes id, price, availableForSale, etc.)
-      // do NOT add extra 'product' field here – Shopify CartLine.merchandise is ProductVariant only
+      ...variant,
     },
   };
 }
@@ -97,7 +96,8 @@ function updateCartTotals(
     (sum, item) => sum + Number(item.cost.totalAmount.amount),
     0,
   );
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "USD";
+  // Dynamically pull currencyCode from the first line item to match local market settings
+  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "GBP";
 
   return {
     totalQuantity,
@@ -111,14 +111,14 @@ function updateCartTotals(
 
 function createEmptyCart(): Cart {
   return {
-    id: "",                          // ← fixed: empty string instead of undefined
+    id: "",
     checkoutUrl: "",
     totalQuantity: 0,
     lines: [],
     cost: {
-      subtotalAmount: { amount: "0", currencyCode: "USD" },
-      totalAmount: { amount: "0", currencyCode: "USD" },
-      totalTaxAmount: { amount: "0", currencyCode: "USD" },
+      subtotalAmount: { amount: "0", currencyCode: "GBP" },
+      totalAmount: { amount: "0", currencyCode: "GBP" },
+      totalTaxAmount: { amount: "0", currencyCode: "GBP" },
     },
   };
 }
