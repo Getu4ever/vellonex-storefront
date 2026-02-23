@@ -9,8 +9,10 @@ export async function Navbar() {
   const menu = await getMenu("next-js-frontend-header-menu");
 
   return (
-    <nav className="relative flex items-center justify-between py-6 px-6 lg:px-14 bg-[#411b3f] border-b border-white/5 z-40">
-      
+    <nav
+      aria-label="Primary navigation"
+      className="relative flex items-center justify-between py-6 px-6 lg:px-14 bg-[#411b3f] border-b border-white/5 z-40"
+    >
       {/* 1. MOBILE MENU */}
       <div className="block flex-none md:hidden text-white">
         <Suspense fallback={null}>
@@ -22,10 +24,19 @@ export async function Navbar() {
         
         {/* LOGO */}
         <div className="flex md:w-1/5 items-center">
-          <Link href="/" className="flex items-center group outline-none">
+          <Link
+            href="/"
+            className="flex items-center group outline-none"
+            aria-label="Vellonex London homepage"
+          >
+            {/* Invisible SEO-friendly brand text */}
+            <span className="sr-only">
+              Vellonex London – Luxury Jewelry & High-End Essentials
+            </span>
+
             <div
               role="img"
-              aria-label="Vellonex Logo"
+              aria-label="Vellonex London logo"
               style={{
                 width: "180px",
                 height: "60px",
@@ -42,11 +53,18 @@ export async function Navbar() {
 
         {/* DESKTOP NAV */}
         <div className="hidden md:flex justify-center md:w-3/5">
-          <ul className="flex gap-10 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/90">
+          <ul
+            role="list"
+            className="flex gap-10 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/90"
+          >
             
             {/* SHOP MEGA MENU */}
             <li className="group/nav relative py-4 cursor-pointer">
-              <span className="hover:text-white transition-colors border-b border-transparent hover:border-white/40 pb-1">
+              <span
+                role="button"
+                aria-haspopup="true"
+                className="hover:text-white transition-colors border-b border-transparent hover:border-white/40 pb-1"
+              >
                 Shop
               </span>
 
@@ -101,7 +119,7 @@ export async function Navbar() {
                 <div className="flex flex-col justify-between bg-white/5 p-5 rounded-sm border border-white/5">
                   <div>
                     <h3 className="text-white font-bold mb-2 tracking-widest text-[10px]">
-                      THE EDIT
+                      The Edit
                     </h3>
                     <p className="text-[9px] text-white/40 leading-relaxed tracking-wider uppercase mb-4">
                       Curated objects <br /> with narrative intent
@@ -111,7 +129,7 @@ export async function Navbar() {
                     href="/search/curated"
                     className="text-[10px] font-bold border-t border-white/10 pt-4 hover:text-white transition-colors"
                   >
-                    VIEW EDIT →
+                    View Edit →
                   </Link>
                 </div>
               </div>
@@ -137,9 +155,8 @@ export async function Navbar() {
             </li>
 
             <li className="py-4">
-              {/* Ensure the handle matches your Shopify Collection URL exactly */}
-              <Link 
-                href="/search/archive" 
+              <Link
+                href="/search/archive"
                 className="text-white/40 hover:text-white transition-colors"
               >
                 Archive
@@ -148,13 +165,12 @@ export async function Navbar() {
           </ul>
         </div>
 
-       {/* SEARCH & CART */}
+        {/* SEARCH & CART */}
         <div className="flex items-center justify-end gap-6 md:w-1/5 relative z-50">
           <Suspense fallback={<SearchSkeleton />}>
             <Search />
           </Suspense>
-          
-          {/* Force the internal SVG/Icon to white using text-white */}
+
           <div className="text-white transition-all duration-300 hover:scale-110 [&_svg]:text-white [&_svg]:fill-current">
             <CartModal />
           </div>

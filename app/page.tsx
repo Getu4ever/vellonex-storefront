@@ -32,7 +32,7 @@ export default async function HomePage() {
   const remainingProducts = products.slice(8, 18);
 
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       {/* ===== HERO / PRIMARY SEO BLOCK ===== */}
       <section className="relative z-10 pt-14 pb-12 text-center px-4 md:px-10">
         <h1 className="text-4xl md:text-6xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
@@ -45,13 +45,13 @@ export default async function HomePage() {
         </p>
 
         <nav className="mt-8 flex justify-center gap-6 text-sm uppercase tracking-widest">
-          <Link href="/collections/rings" className="hover:underline">
+          <Link href="/search/the-orbit-rings" className="hover:underline">
             Rings
           </Link>
-          <Link href="/collections/necklaces" className="hover:underline">
+          <Link href="/search/the-foundation-necklaces" className="hover:underline">
             Necklaces
           </Link>
-          <Link href="/collections/bracelets" className="hover:underline">
+          <Link href="/search/the-link-bracelets" className="hover:underline">
             Bracelets
           </Link>
         </nav>
@@ -103,6 +103,6 @@ export default async function HomePage() {
           </Grid>
         </section>
       )}
-    </main>
+    </div>
   );
 }
