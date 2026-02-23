@@ -122,6 +122,7 @@ export default function RootLayout({
       </head>
 
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans antialiased">
+        <h1 className="sr-only">Vellonex London - Luxury Architectural Jewelry & High-End Essentials</h1>
         <Suspense
           fallback={
             <div className="h-[120px] bg-neutral-100 dark:bg-neutral-800 animate-pulse" />

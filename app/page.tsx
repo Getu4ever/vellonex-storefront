@@ -1,8 +1,12 @@
+
 import EditorialHero from 'components/editorial-hero';
 import Grid from 'components/grid';
 import ProductGridItems from 'components/layout/product-grid-items';
 import { getCollectionProducts } from 'lib/shopify';
 import { Metadata } from 'next';
+
+export const dynamic = 'force-static';
+export const revalidate = 3600; // 1 hour if needed
 
 export const metadata: Metadata = {
   title: 'Vellonex London | Jewelry & High-End Essentials',
@@ -28,7 +32,7 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       {/* Hero / Brand H1 */}
-     <section className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
+     <section role="banner" className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
   <h1 className="text-5xl md:text-7xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
     Vellonex London
   </h1>
