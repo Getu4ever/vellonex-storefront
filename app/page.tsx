@@ -1,108 +1,71 @@
-import EditorialHero from "components/editorial-hero";
-import Grid from "components/grid";
-import ProductGridItems from "components/layout/product-grid-items";
-import { getCollectionProducts } from "lib/shopify";
-import { Metadata } from "next";
-import Link from "next/link";
+import EditorialHero from 'components/editorial-hero';
+import Grid from 'components/grid';
+import ProductGridItems from 'components/layout/product-grid-items';
+import { getCollectionProducts } from 'lib/shopify';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Vellonex London | Luxury Architectural Jewelry & Essentials",
-  description:
-    "Luxury architectural jewelry crafted in titanium, gold vermeil and lab-grown diamonds. Minimalist rings, necklaces and essentials by Vellonex London.",
+  title: 'Vellonex London | Luxury Architectural Jewelry & High-End Essentials',
+  description: 'Handcrafted minimalist rings, necklaces, bracelets and luxury essentials in titanium, gold vermeil and lab-grown diamonds. Precision-engineered jewelry for men and women.',
   openGraph: {
-    title: "Vellonex London | Luxury Architectural Jewelry",
-    description:
-      "Precision-engineered minimalist jewelry blending industrial architecture with refined luxury.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Vellonex London luxury architectural jewelry",
-      },
-    ],
-    type: "website",
+    title: 'Vellonex London | Luxury Architectural Jewelry',
+    description: 'Elevated essentials blending industrial design and refined luxury.',
+    images: '/og-home.jpg',
   },
 };
 
 export default async function HomePage() {
-  const products = await getCollectionProducts({ collection: "featured" });
+  // Fetch with revalidation at data level (replaces route-level revalidate)
+  const products = await getCollectionProducts({
+    collection: 'featured',
+    // Optional: add revalidation here if your getCollectionProducts uses fetch
+    // If it uses fetch internally, you can pass revalidate option there
+  });
 
   const featuredProducts = products.slice(0, 8);
   const remainingProducts = products.slice(8, 18);
 
   return (
-    <div className="min-h-screen">
-      {/* ===== HERO / PRIMARY SEO BLOCK ===== */}
-      <section className="relative z-10 pt-14 pb-12 text-center px-4 md:px-10">
-        <h1 className="text-4xl md:text-6xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
+    <main className="min-h-screen">
+      {/* Hero / Brand H1 */}
+      <section className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
+        <h1 className="text-5xl md:text-7xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
           Vellonex London
         </h1>
-
-        <p className="mt-4 text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto">
-          Luxury architectural jewelry crafted for permanence — minimalist rings,
-          necklaces and essentials engineered with precision.
+        <p className="mt-6 text-xl md:text-2xl text-neutral-700 dark:text-neutral-300 max-w-4xl mx-auto">
+          Luxury architectural jewelry & high-end essentials — engineered for permanence.
         </p>
-
-        <nav className="mt-8 flex justify-center gap-6 text-sm uppercase tracking-widest">
-          <Link href="/search/the-orbit-rings" className="hover:underline">
-            Rings
-          </Link>
-          <Link href="/search/the-foundation-necklaces" className="hover:underline">
-            Necklaces
-          </Link>
-          <Link href="/search/the-link-bracelets" className="hover:underline">
-            Bracelets
-          </Link>
-        </nav>
-
-        <div className="mt-10 h-px w-32 bg-[#3B1438]/30 dark:bg-white/20 mx-auto" />
+        <div className="mt-10 h-px w-32 bg-[#3B1438]/40 dark:bg-white/20 mx-auto" />
       </section>
 
-      {/* ===== FEATURED PRODUCTS ===== */}
-      <section className="px-4 md:px-10 pb-20">
-        <header className="mb-8 text-center">
-          <h2 className="text-xl md:text-2xl tracking-widest uppercase text-[#3B1438] dark:text-white">
-            Featured Jewelry Collection
-          </h2>
-          <p className="mt-3 text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-            Discover our most iconic architectural designs — precision-engineered
-            jewelry for modern permanence.
-          </p>
-        </header>
-
-        <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+      {/* Featured Products */}
+      <section className="px-4 md:px-10 pb-16">
+        <h2 className="sr-only">Featured Luxury Collection</h2>
+        <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+          {/* Add priority={true} to first 4 images in ProductGridItems for LCP */}
           <ProductGridItems products={featuredProducts} />
         </Grid>
       </section>
 
-      {/* ===== EDITORIAL / BRAND STORY ===== */}
-      <section aria-labelledby="editorial-heading">
-        <h2 id="editorial-heading" className="sr-only">
-          Brand Philosophy and Design Language
-        </h2>
-        <EditorialHero />
-      </section>
+      {/* Editorial */}
+      <EditorialHero />
 
-      {/* ===== CONTINUE EXPLORING ===== */}
+      {/* Continue Exploring */}
       {remainingProducts.length > 0 && (
-        <section className="px-4 md:px-10 py-24">
+        <section className="px-4 md:px-10 py-20">
           <header className="mb-12 text-center">
-            <h2 className="text-xl md:text-2xl tracking-widest uppercase text-[#3B1438] dark:text-white">
+            <h2 className="text-2xl md:text-3xl tracking-widest uppercase text-[#3B1438] dark:text-white">
               Continue Exploring
             </h2>
-            <p className="mt-3 text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto">
-              Explore additional designs crafted with architectural precision and
-              enduring materials.
+            <p className="mt-4 text-neutral-600 dark:text-neutral-400">
+              Discover more precision-crafted pieces from our luxury collection.
             </p>
-            <div className="mt-4 h-px w-24 bg-[#3B1438]/30 dark:bg-white/20 mx-auto" />
           </header>
-
-          <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             <ProductGridItems products={remainingProducts} />
           </Grid>
         </section>
       )}
-    </div>
+    </main>
   );
 }

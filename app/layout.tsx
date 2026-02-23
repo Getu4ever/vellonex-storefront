@@ -8,16 +8,16 @@ import { Toaster } from "sonner";
 import CartProviderWrapper from "../components/cart/CartProviderWrapper";
 import "./globals.css";
 
-// Brand configuration (environment-aware)
+// Brand configuration
 const SITE_NAME = process.env.SITE_NAME || "Vellonex";
 const SITE_DESCRIPTION =
-  "Discover Vellonex London's collection of architectural jewelry and high-end essentials. Handcrafted luxury pieces for the modern minimalist.";
+  "Luxury architectural jewelry and high-end essentials from Vellonex London — handcrafted minimalist rings, necklaces, bracelets and more in titanium, gold vermeil and lab-grown diamonds.";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
 
   title: {
-    default: `${SITE_NAME} London | Luxury Jewelry & High-End Essentials`,
+    default: `${SITE_NAME} London | Luxury Architectural Jewelry & Essentials`,
     template: `%s | ${SITE_NAME} London`,
   },
 
@@ -25,10 +25,13 @@ export const metadata = {
 
   keywords: [
     "luxury jewelry London",
-    "minimalist jewelry",
-    "high-end essentials",
-    "Vellonex jewelry",
-    "bespoke jewelry UK",
+    "architectural jewelry",
+    "minimalist rings",
+    "titanium jewelry",
+    "gold vermeil",
+    "lab grown diamonds",
+    "Vellonex London",
+    "high-end essentials UK",
   ],
 
   alternates: {
@@ -53,18 +56,27 @@ export const metadata = {
   },
 
   openGraph: {
-    title: `${SITE_NAME} London`,
+    title: `${SITE_NAME} London | Luxury Architectural Jewelry`,
     description: SITE_DESCRIPTION,
     url: baseUrl,
     siteName: SITE_NAME,
+    images: [
+      {
+        url: "/og-home.jpg", // add a real 1200x630 image in /public
+        width: 1200,
+        height: 630,
+        alt: "Vellonex London luxury architectural jewelry collection",
+      },
+    ],
     locale: "en_GB",
     type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} London`,
+    title: `${SITE_NAME} London | Luxury Architectural Jewelry`,
     description: SITE_DESCRIPTION,
+    images: ["/og-home.jpg"],
   },
 };
 
@@ -76,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <head>
-        {/* Enhanced Structured Data for SEO & Rich Results */}
+        {/* Structured Data - helps rich results & external factors score */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -89,7 +101,8 @@ export default function RootLayout({
                 logo: `${baseUrl}/icon.png`,
                 description: SITE_DESCRIPTION,
                 sameAs: [
-                  "https://instagram.com/vellonex",
+                  "https://instagram.com/vellonex", // add real socials
+                  "https://twitter.com/vellonex",
                 ],
               },
               {
@@ -108,7 +121,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans">
+      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans antialiased">
         <Suspense
           fallback={
             <div className="h-[120px] bg-neutral-100 dark:bg-neutral-800 animate-pulse" />
@@ -117,8 +130,8 @@ export default function RootLayout({
           <CartProviderWrapper>
             <Navbar />
 
-            {/* Main content landmark */}
-            <main role="main" className="pt-[120px]">
+            {/* Semantic main landmark – improves page structure score */}
+            <main role="main" id="main-content" className="pt-[120px]">
               <PageTransition>{children}</PageTransition>
               <Toaster closeButton />
             </main>
