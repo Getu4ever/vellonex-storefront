@@ -5,8 +5,8 @@ import { getCollectionProducts } from 'lib/shopify';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Vellonex London | Luxury Architectural Jewelry & High-End Essentials',
-  description: 'Handcrafted minimalist rings, necklaces, bracelets and luxury essentials in titanium, gold vermeil and lab-grown diamonds. Precision-engineered jewelry for men and women.',
+  title: 'Vellonex London | Jewelry & High-End Essentials',
+  description: 'Handcrafted minimalist rings, necklaces, bracelets and luxury essentials.',
   openGraph: {
     title: 'Vellonex London | Luxury Architectural Jewelry',
     description: 'Elevated essentials blending industrial design and refined luxury.',
@@ -28,15 +28,15 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       {/* Hero / Brand H1 */}
-      <section className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
-        <h1 className="text-5xl md:text-7xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
-          Vellonex London
-        </h1>
-        <p className="mt-6 text-xl md:text-2xl text-neutral-700 dark:text-neutral-300 max-w-4xl mx-auto">
-          Luxury architectural jewelry & high-end essentials — engineered for permanence.
-        </p>
-        <div className="mt-10 h-px w-32 bg-[#3B1438]/40 dark:bg-white/20 mx-auto" />
-      </section>
+     <section className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
+  <h1 className="text-5xl md:text-7xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
+    Vellonex London
+  </h1>
+  <p className="mt-6 text-xl md:text-2xl text-neutral-700 dark:text-neutral-300 max-w-4xl mx-auto">
+    Luxury architectural jewelry & high-end essentials — engineered for permanence.
+  </p>
+  <div className="mt-10 h-px w-32 bg-[#3B1438]/40 dark:bg-white/20 mx-auto" />
+</section>
 
       {/* Featured Products */}
       <section className="px-4 md:px-10 pb-16">
