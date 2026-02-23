@@ -14,19 +14,19 @@ export default async function HomePage() {
   return (
     <>
       {/* BRAND HEADER */}
-      <section className="relative z-10 pt-10 pb-16 text-center px-4">
-        <h1 className="text-sm md:text-sm tracking-[0.4em] uppercase font-light text-[#3B1438] dark:text-white/60">
+<section className="relative z-10 pt-0 pb-6 text-center px-4">
+  <h1 className="text-sm md:text-sm tracking-[0.4em] uppercase font-light text-[#3B1438] dark:text-white/60">
     Vellonex London — Luxury Jewelry & High-End Essentials
   </h1>
-        <div className="mt-8 h-px w-24 bg-black/10 dark:bg-white/20 mx-auto" />
-      </section>
+  <div className="mt-6 h-px w-24 bg-black/10 dark:bg-white/20 mx-auto" />
+</section>
 
-      {/* TOP PRODUCT GRID */}
-      <section className="px-4 md:px-10 pb-12">
-        <Grid>
-          <ProductGridItems products={featuredProducts} />
-        </Grid>
-      </section>
+{/* TOP PRODUCT GRID */}
+<section className="px-4 md:px-10 pb-12">
+  <Grid>
+    <ProductGridItems products={featuredProducts} />
+  </Grid>
+</section>
 
       {/* EDITORIAL SECTION */}
       <EditorialHero />
@@ -35,7 +35,7 @@ export default async function HomePage() {
       {remainingProducts.length > 0 && (
         <section className="px-4 md:px-10 py-24">
           <div className="mb-12">
-            <h3 className="text-[10px] tracking-[0.4em] uppercase opacity-50 mb-4">
+            <h3 className="text-[14px] tracking-[0.4em] uppercase opacity-50 mb-4">
               Continue Exploring
             </h3>
             <div className="h-px w-full bg-white/10" />
