@@ -10,17 +10,16 @@ export function DeleteItemButton({
   optimisticUpdate,
 }: {
   item: CartLine;
-  optimisticUpdate: any;
+  optimisticUpdate: (merchandiseId: string, action: "delete") => void;
 }) {
   const [message, formAction] = useActionState(removeItem, null);
   const merchandiseId = item.merchandise.id;
-  const removeItemAction = formAction.bind(null, merchandiseId);
 
   return (
     <form
       action={async () => {
         optimisticUpdate(merchandiseId, "delete");
-        removeItemAction();
+        await formAction(merchandiseId);
       }}
     >
       <button
@@ -30,6 +29,7 @@ export function DeleteItemButton({
       >
         <XMarkIcon className="mx-[1px] h-4 w-4 text-white dark:text-black" />
       </button>
+
       <p aria-live="polite" className="sr-only" role="status">
         {message}
       </p>

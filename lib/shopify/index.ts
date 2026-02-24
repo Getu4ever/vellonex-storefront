@@ -1,4 +1,4 @@
-import { revalidateTag } from 'next/cache'; // ← added this import
+import { revalidateTag } from 'next/cache';
 
 import {
   HIDDEN_PRODUCT_TAG,
@@ -142,10 +142,14 @@ export async function getCart(cartId: string | undefined): Promise<Cart | undefi
     const res = await shopifyFetch<ShopifyCartOperation>({
       query: getCartQuery,
       variables: { cartId },
-      next: { revalidate: 60 }, // cache for 60 seconds (adjust as needed)
+      cache: 'no-store', // 👈 This is the fix. Forces fresh data every time.
+      next: { tags: [TAGS.cart] }, // Optional: use tags if you want manual revalidation later
     });
     return res.body.data.cart ? reshapeCart(res.body.data.cart) : undefined;
-  } catch { return undefined; }
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    return undefined;
+  }
 }
 
 export async function addToCart(lines: { merchandiseId: string; quantity: number }[]): Promise<Cart> {
@@ -326,11 +330,13 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (topic.startsWith("collections/")) {
-    (revalidateTag as (tag: string) => void)(TAGS.collections);
+    // @ts-expect-error – Next.js revalidateTag type overload bug in some 16.x versions (known issue)
+    revalidateTag(TAGS.collections);
   }
 
   if (topic.startsWith("products/")) {
-    (revalidateTag as (tag: string) => void)(TAGS.products);
+    // @ts-expect-error – Next.js revalidateTag type overload bug in some 16.x versions (known issue)
+    revalidateTag(TAGS.products);
   }
 
   return NextResponse.json({ revalidated: true });

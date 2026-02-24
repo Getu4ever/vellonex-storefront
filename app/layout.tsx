@@ -62,7 +62,7 @@ export const metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: "/og-home.jpg", // add a real 1200x630 image in /public
+        url: "/og-home.jpg",
         width: 1200,
         height: 630,
         alt: "Vellonex London luxury architectural jewelry collection",
@@ -88,7 +88,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <head>
-        {/* Structured Data - helps rich results & external factors score */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -101,7 +100,7 @@ export default function RootLayout({
                 logo: `${baseUrl}/icon.png`,
                 description: SITE_DESCRIPTION,
                 sameAs: [
-                  "https://instagram.com/vellonex", // add real socials
+                  "https://instagram.com/vellonex",
                   "https://twitter.com/vellonex",
                 ],
               },
@@ -122,23 +121,23 @@ export default function RootLayout({
       </head>
 
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans antialiased">
-        <Suspense
-          fallback={
-            <div className="h-[120px] bg-neutral-100 dark:bg-neutral-800 animate-pulse" />
-          }
-        >
-          <CartProviderWrapper>
+        {/* CartProvider must wrap everything and stay outside Suspense to maintain state connectivity */}
+        <CartProviderWrapper>
+          <Suspense
+            fallback={
+              <div className="h-[120px] bg-neutral-100 dark:bg-neutral-800 animate-pulse" />
+            }
+          >
             <Navbar />
+          </Suspense>
 
-            {/* Semantic main landmark – improves page structure score */}
-            <main role="main" id="main-content" className="pt-[120px]">
-              <PageTransition>{children}</PageTransition>
-              <Toaster closeButton />
-            </main>
+          <main role="main" id="main-content" className="pt-[120px]">
+            <PageTransition>{children}</PageTransition>
+            <Toaster closeButton />
+          </main>
 
-            <Footer />
-          </CartProviderWrapper>
-        </Suspense>
+          <Footer />
+        </CartProviderWrapper>
       </body>
     </html>
   );
