@@ -1,145 +1,86 @@
-import Footer from "components/layout/footer";
-import { Navbar } from "components/layout/navbar";
-import PageTransition from "components/layout/page-transition";
-import { GeistSans } from "geist/font/sans";
-import { baseUrl } from "lib/utils";
-import { ReactNode, Suspense } from "react";
-import { Toaster } from "sonner";
-import CartProviderWrapper from "../components/cart/CartProviderWrapper";
-import "./globals.css";
+import EditorialHero from 'components/editorial-hero';
+import Grid from 'components/grid';
+import ProductGridItems from 'components/layout/product-grid-items';
+import { getCollectionProducts } from 'lib/shopify';
+import { Metadata } from 'next';
+import Link from 'next/link';
 
-// Brand configuration
-const SITE_NAME = process.env.SITE_NAME || "Vellonex";
-const SITE_DESCRIPTION =
-  "Luxury architectural jewelry and high-end essentials from Vellonex London — handcrafted minimalist rings, necklaces, bracelets and more in titanium, gold vermeil and lab-grown diamonds.";
-
-export const metadata = {
-  metadataBase: new URL(baseUrl),
-
-  title: {
-    default: `${SITE_NAME} London | Luxury Architectural Jewelry & Essentials`,
-    template: `%s | ${SITE_NAME} London`,
-  },
-
-  description: SITE_DESCRIPTION,
-
-  keywords: [
-    "luxury jewelry London",
-    "architectural jewelry",
-    "minimalist rings",
-    "titanium jewelry",
-    "gold vermeil",
-    "lab grown diamonds",
-    "Vellonex London",
-    "high-end essentials UK",
-  ],
-
-  alternates: {
-    canonical: baseUrl,
-  },
-
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-
-  icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
-  },
-
+export const metadata: Metadata = {
+  title: 'Vellonex London | Luxury Architectural Jewelry & High-End Essentials',
+  description: 'Handcrafted minimalist rings, necklaces, bracelets and luxury essentials in titanium, gold vermeil and lab-grown diamonds. Precision-engineered jewelry for men and women.',
   openGraph: {
-    title: `${SITE_NAME} London | Luxury Architectural Jewelry`,
-    description: SITE_DESCRIPTION,
-    url: baseUrl,
-    siteName: SITE_NAME,
-    images: [
-      {
-        url: "/og-home.jpg", // add a real 1200x630 image in /public
-        width: 1200,
-        height: 630,
-        alt: "Vellonex London luxury architectural jewelry collection",
-      },
-    ],
-    locale: "en_GB",
-    type: "website",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: `${SITE_NAME} London | Luxury Architectural Jewelry`,
-    description: SITE_DESCRIPTION,
-    images: ["/og-home.jpg"],
+    title: 'Vellonex London | Luxury Architectural Jewelry',
+    description: 'Elevated essentials blending industrial design and refined luxury.',
+    images: '/og-home.jpg',
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default async function HomePage() {
+  const products = await getCollectionProducts({ collection: 'featured' });
+
+  const featuredProducts = products.slice(0, 8);
+  const remainingProducts = products.slice(8, 18);
+
   return (
-    <html lang="en" className={GeistSans.variable}>
-      <head>
-        {/* Structured Data - helps rich results & external factors score */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                name: "Vellonex London",
-                url: baseUrl,
-                logo: `${baseUrl}/icon.png`,
-                description: SITE_DESCRIPTION,
-                sameAs: [
-                  "https://instagram.com/vellonex", // add real socials
-                  "https://twitter.com/vellonex",
-                ],
-              },
-              {
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "Vellonex London",
-                url: baseUrl,
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: `${baseUrl}/search?q={search_term_string}`,
-                  "query-input": "required name=search_term_string",
-                },
-              },
-            ]),
-          }}
-        />
-      </head>
+    <main className="min-h-screen">
+      {/* Server-rendered introductory text + H2 + internal links */}
+      <section className="px-4 md:px-10 py-12 max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-serif uppercase tracking-wider text-[#3B1438] dark:text-white mb-6">
+          Featured Architectural Collection
+        </h2>
+        <p className="text-lg md:text-xl text-neutral-700 dark:text-neutral-300 leading-relaxed mb-8">
+          Vellonex London presents handcrafted minimalist jewelry and high-end essentials — precision-engineered in titanium, gold vermeil, and lab-grown diamonds. Each piece blends industrial architecture with timeless luxury, designed for permanence and modern elegance. Explore our curated selection of 
+          <Link href="/search/rings" className="text-[#3B1438] dark:text-white underline hover:no-underline mx-1">
+            rings
+          </Link>, 
+          <Link href="/search/necklaces" className="text-[#3B1438] dark:text-white underline hover:no-underline mx-1">
+            necklaces
+          </Link>, and 
+          <Link href="/search/bracelets" className="text-[#3B1438] dark:text-white underline hover:no-underline mx-1">
+            bracelets
+          </Link>.
+        </p>
+        <div className="h-px w-32 bg-[#3B1438]/30 dark:bg-white/20 mx-auto mb-8" />
+      </section>
 
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans antialiased">
-        <Suspense
-          fallback={
-            <div className="h-[120px] bg-neutral-100 dark:bg-neutral-800 animate-pulse" />
-          }
-        >
-          <CartProviderWrapper>
-            <Navbar />
+      {/* Hero / Brand H1 – already server-rendered */}
+      <section className="relative z-10 pt-8 pb-12 text-center px-4 md:px-10">
+        <h1 className="text-5xl md:text-7xl font-serif tracking-wider uppercase text-[#3B1438] dark:text-white">
+          Vellonex London
+        </h1>
+        <p className="mt-6 text-xl md:text-2xl text-neutral-700 dark:text-neutral-300 max-w-4xl mx-auto">
+          Luxury architectural jewelry & high-end essentials — engineered for permanence.
+        </p>
+        <div className="mt-10 h-px w-32 bg-[#3B1438]/40 dark:bg-white/20 mx-auto" />
+      </section>
 
-            {/* Semantic main landmark – improves page structure score */}
-            <main role="main" id="main-content" className="pt-[120px]">
-              <PageTransition>{children}</PageTransition>
-              <Toaster closeButton />
-            </main>
+      {/* Featured Products Grid */}
+      <section className="px-4 md:px-10 pb-16">
+        <h2 className="sr-only">Featured Luxury Collection</h2>
+        <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+          <ProductGridItems products={featuredProducts} />
+        </Grid>
+      </section>
 
-            <Footer />
-          </CartProviderWrapper>
-        </Suspense>
-      </body>
-    </html>
+      {/* Editorial Section */}
+      <EditorialHero />
+
+      {/* Continue Exploring */}
+      {remainingProducts.length > 0 && (
+        <section className="px-4 md:px-10 py-20">
+          <header className="mb-12 text-center">
+            <h2 className="text-2xl md:text-3xl tracking-widest uppercase text-[#3B1438] dark:text-white">
+              Continue Exploring
+            </h2>
+            <p className="mt-4 text-neutral-600 dark:text-neutral-400">
+              Discover more precision-crafted pieces from our luxury collection.
+            </p>
+          </header>
+          <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+            <ProductGridItems products={remainingProducts} />
+          </Grid>
+        </section>
+      )}
+    </main>
   );
 }
