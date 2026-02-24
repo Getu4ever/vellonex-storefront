@@ -5,6 +5,7 @@ import { getCollectionProducts } from 'lib/shopify';
 import { Product } from 'lib/shopify/types';
 import { Metadata } from 'next';
 
+// Keep this to ensure the cart and dynamic data stay updated
 export const dynamic = 'force-dynamic'; 
 
 export const metadata: Metadata = {
@@ -29,24 +30,8 @@ export default async function HomePage() {
   const featuredProducts = products.slice(0, 8);
   const remainingProducts = products.slice(8, 18);
 
-  // LCP Injection: Identify the very first product image URL
- const firstProduct = featuredProducts[0];
-const firstProductImage = firstProduct?.featuredImage?.url;
-
-return (
-  <>
-    {firstProductImage && (
-      <link
-        rel="preload"
-        as="image"
-        href={firstProductImage}
-        fetchPriority="high"
-        // This ensures mobile-specific preloading logic
-        imageSrcSet={`${firstProductImage}?width=400 400w, ${firstProductImage}?width=800 800w, ${firstProductImage} 1200w`}
-        imageSizes="(min-width: 768px) 33vw, 100vw"
-      />
-    )}
-
+  return (
+    <>
       <main>
         {/* 1. Original Minimalist Hero Section */}
         <section className="relative z-10 pt-16 pb-12 text-center px-4 md:px-10">
@@ -62,7 +47,7 @@ return (
         {/* 2. Main Product Grid */}
         <section className="px-4 md:px-10 pb-16">
           <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            <ProductGridItems products={featuredProducts} priorityCount={4} />
+            <ProductGridItems products={featuredProducts} />
           </Grid>
         </section>
 

@@ -1,11 +1,10 @@
-import { revalidateTag } from 'next/cache';
-
 import {
   HIDDEN_PRODUCT_TAG,
   SHOPIFY_GRAPHQL_API_ENDPOINT,
   TAGS,
 } from "lib/constants";
 import { ensureStartsWith } from "lib/utils";
+import { revalidateTag } from 'next/cache';
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -68,27 +67,42 @@ export async function shopifyFetch<T>({
   next?: NextFetchRequestConfig;
   cache?: RequestCache;
 }): Promise<{ status: number; body: T }> {
-  const storeDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-  const storefrontToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN;
+  // Use server-side variables primarily, fallback to public if necessary
+  const storeDomain = process.env.SHOPIFY_STORE_DOMAIN || process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+  const storefrontToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN;
+
   const domain = storeDomain ? ensureStartsWith(storeDomain, "https://") : "";
   const endpoint = domain ? `${domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}` : "";
 
-  const res = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": storefrontToken!,
-      ...headers,
-    },
-    body: JSON.stringify({ query, variables }),
-    next,
-    cache,
-  });
+  if (!endpoint) {
+    throw new Error("Shopify domain is missing. Check your environment variables.");
+  }
 
-  const text = await res.text();
-  const body = text ? JSON.parse(text) : {};
-  if (!res.ok || body.errors) throw { status: res.status, errors: body.errors, query };
-  return { status: res.status, body };
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": storefrontToken!,
+        ...headers,
+      },
+      body: JSON.stringify({ query, variables }),
+      next,
+      cache,
+    });
+
+    const text = await res.text();
+    const body = text ? JSON.parse(text) : {};
+    
+    if (!res.ok || body.errors) {
+      throw { status: res.status, errors: body.errors, query };
+    }
+    
+    return { status: res.status, body };
+  } catch (error) {
+    console.error("Shopify Fetch Error:", error);
+    throw error;
+  }
 }
 
 /* RESHAPE HELPERS */
@@ -142,8 +156,8 @@ export async function getCart(cartId: string | undefined): Promise<Cart | undefi
     const res = await shopifyFetch<ShopifyCartOperation>({
       query: getCartQuery,
       variables: { cartId },
-      cache: 'no-store', // 👈 This is the fix. Forces fresh data every time.
-      next: { tags: [TAGS.cart] }, // Optional: use tags if you want manual revalidation later
+      cache: 'no-store', // This forces fresh data every time for the cart
+      next: { tags: [TAGS.cart] }, 
     });
     return res.body.data.cart ? reshapeCart(res.body.data.cart) : undefined;
   } catch (error) {
@@ -158,7 +172,7 @@ export async function addToCart(lines: { merchandiseId: string; quantity: number
   const res = await shopifyFetch<ShopifyAddToCartOperation>({
     query: addToCartMutation,
     variables: { cartId, lines },
-    next: { revalidate: 0 }, // no cache – cart changes immediately
+    next: { revalidate: 0 },
   });
   return reshapeCart(res.body.data.cartLinesAdd.cart);
 }
@@ -187,12 +201,12 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   const res = await shopifyFetch<ShopifyMenuOperation>({
     query: getMenuQuery,
     variables: { handle },
-    next: { revalidate: 86400 }, // 1 day
+    next: { revalidate: 86400 },
   });
   
   return res.body.data.menu?.items.map((item) => {
     const cleanUrl = item.url
-      .replace(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!, "")
+      .replace(process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || '', "")
       .replace(/^https?:\/\/[^\/]+/, "");
 
     if (cleanUrl.includes('/pages/')) {
@@ -227,7 +241,7 @@ export async function getCollection(handle: string): Promise<Collection | undefi
   const res = await shopifyFetch<ShopifyCollectionOperation>({
     query: getCollectionQuery,
     variables: { handle },
-    next: { revalidate: 86400 }, // 1 day
+    next: { revalidate: 86400 },
   });
   return reshapeCollection(res.body.data.collection || undefined);
 }
@@ -257,7 +271,7 @@ export async function getCollectionProducts({
       sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
       reverse,
     },
-    next: { revalidate: 3600 }, // 1 hour
+    next: { revalidate: 3600 },
   });
 
   return reshapeProducts(
@@ -330,12 +344,12 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (topic.startsWith("collections/")) {
-    // @ts-expect-error – Next.js revalidateTag type overload bug in some 16.x versions (known issue)
+    // @ts-expect-error – Next.js overload bug
     revalidateTag(TAGS.collections);
   }
 
   if (topic.startsWith("products/")) {
-    // @ts-expect-error – Next.js revalidateTag type overload bug in some 16.x versions (known issue)
+    // @ts-expect-error – Next.js overload bug
     revalidateTag(TAGS.products);
   }
 

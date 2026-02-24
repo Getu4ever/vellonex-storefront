@@ -1,4 +1,4 @@
-'use client'; // Required for interactive state
+'use client';
 
 import {
   ChatBubbleLeftRightIcon,
@@ -10,11 +10,11 @@ import { useState } from 'react';
 
 export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true); // Start loading
+    setIsSubmitting(true);
 
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -37,7 +37,7 @@ export default function ContactPage() {
     } catch (error) {
       alert("Network error. Please check your connection.");
     } finally {
-      setIsSubmitting(false); // Stop loading
+      setIsSubmitting(false);
     }
   };
 
@@ -53,10 +53,9 @@ export default function ContactPage() {
         </p>
       </section>
 
-      {/* Added responsive horizontal padding to the main container */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-16 grid grid-cols-1 md:grid-cols-2 gap-16">
         
-        {/* Contact Info (Left Side) - Pushed right with extra padding */}
+        {/* Contact Info (Left Side) */}
         <div className="space-y-12 pl-2 md:pl-12 lg:pl-20">
           <div>
             <h2 className="text-xl font-medium mb-6 uppercase tracking-wider text-[#3B1438]">Direct Contact</h2>
@@ -119,7 +118,7 @@ export default function ContactPage() {
               </button>
             </form>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center py-12 animate-in fade-in duration-700">
+            <div className="h-full flex flex-col items-center justify-center text-center py-12">
               <CheckCircleIcon className="w-16 h-16 text-green-600 mb-4" />
               <h2 className="text-2xl font-serif text-[#3B1438] mb-2 text-sm uppercase tracking-widest">Thank You</h2>
               <p className="text-gray-600 font-light text-sm">

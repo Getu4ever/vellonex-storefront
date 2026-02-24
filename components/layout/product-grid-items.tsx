@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ProductGridItems({
   products,
-  priorityCount = 4, // Changed from 0 to 4 to fix the slow load
+  priorityCount = 4, 
 }: {
   products: Product[];
   priorityCount?: number;
@@ -13,7 +13,7 @@ export default function ProductGridItems({
   return (
     <>
       {products.map((product, index) => {
-        // If index is 0, 1, 2, or 3, isPriority will be true
+        // High priority for the first row (index 0-3)
         const isPriority = index < priorityCount;
 
         return (
@@ -32,12 +32,10 @@ export default function ProductGridItems({
                 }}
                 src={product.featuredImage?.url ?? '/placeholder.jpg'}
                 fill
-                sizes="(min-width: 768px) 33vw, 100vw"
-                /* SPEED FIX: 
-                   Priority images are preloaded. 
-                   Non-priority images are lazily loaded to save bandwidth.
-                */
+                sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
                 priority={isPriority}
+                // Explicitly set loading to "eager" for priority images to bypass browser throttling
+                loading={isPriority ? "eager" : "lazy"}
               />
             </Link>
           </Grid.Item>

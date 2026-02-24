@@ -87,45 +87,40 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.variable}>
-     <head>
-  {/* Performance Injections: Shopify Connection Warm-up */}
-  <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-  <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-  
-  <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{
-      __html: JSON.stringify([
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Vellonex London",
-          url: baseUrl,
-          logo: `${baseUrl}/icon.png`,
-          description: SITE_DESCRIPTION,
-          sameAs: [
-            "https://instagram.com/vellonex",
-            "https://twitter.com/vellonex",
-          ],
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "Vellonex London",
-          url: baseUrl,
-          potentialAction: {
-            "@type": "SearchAction",
-            target: `${baseUrl}/search?q={search_term_string}`,
-            "query-input": "required name=search_term_string",
-          },
-        },
-      ]),
-    }}
-  />
-</head>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "Vellonex London",
+                url: baseUrl,
+                logo: `${baseUrl}/icon.png`,
+                description: SITE_DESCRIPTION,
+                sameAs: [
+                  "https://instagram.com/vellonex",
+                  "https://twitter.com/vellonex",
+                ],
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Vellonex London",
+                url: baseUrl,
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: `${baseUrl}/search?q={search_term_string}`,
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ]),
+          }}
+        />
+      </head>
 
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white font-sans antialiased">
-        {/* CartProvider must wrap everything and stay outside Suspense to maintain state connectivity */}
         <CartProviderWrapper>
           <Suspense
             fallback={
