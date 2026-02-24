@@ -1,14 +1,26 @@
+import Image from 'next/image';
+
 export default function EditorialHero() {
+  // This is a tiny 10px Base64 version of your Unsplash image
+  const blurData = "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IEIAAABQAwCdASoKAAoAAUAmJaQAA3AA/v89WAAAAA6Uf79X/f///8AA/u6f//+3//9H//8AAAD//wAA";
+
   return (
     <section className="relative w-full h-[70vh] my-24 overflow-hidden bg-[#1a0b19]">
-      {/* Background Image Container */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-[2000ms] hover:scale-105"
-        style={{ 
-          backgroundImage: 'url("https://images.unsplash.com/photo-1531995811006-35cb42e1a022?q=80&w=2070&auto=format&fit=crop")',
-          filter: 'brightness(0.7)' 
-        }} 
-      />
+      {/* Optimized Background Image Container */}
+      <div className="absolute inset-0 w-full h-full transition-transform duration-[2000ms] hover:scale-105">
+        <Image
+          src="https://images.unsplash.com/photo-1531995811006-35cb42e1a022?q=80&w=2070&auto=format&fit=crop"
+          alt="Vellonex Signature Series Jewelry"
+          fill
+          priority
+          placeholder="blur" // 1. Enable blur
+          blurDataURL={blurData} // 2. Pass the tiny string
+          className="object-cover"
+          style={{ filter: 'brightness(0.7)' }}
+          sizes="100vw"
+          quality={85}
+        />
+      </div>
       
       {/* Text Content Overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
