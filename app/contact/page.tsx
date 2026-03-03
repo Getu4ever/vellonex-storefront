@@ -75,7 +75,7 @@ export default function ContactPage() {
             <h2 className="text-xl font-medium mb-6 uppercase tracking-wider text-[#3B1438]">Client Services</h2>
             <p className="font-light text-gray-600 mb-4 text-sm">Monday – Friday: 9am – 6pm GMT</p>
             <a 
-              href="https://wa.me/447565472445" 
+              href="https://api.whatsapp.com/send?phone=447565472445" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="inline-flex items-center gap-2 border border-[#3B1438] px-6 py-3 text-[#3B1438] hover:bg-[#3B1438] hover:text-white transition-all text-xs tracking-widest uppercase"
