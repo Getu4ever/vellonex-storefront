@@ -6,11 +6,13 @@ import {
   EnvelopeIcon,
   PhoneIcon
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,6 +20,16 @@ export default function ContactPage() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    const captchaToken = recaptchaRef.current?.getValue();
+    
+    if (!captchaToken) {
+      alert("Please complete the reCAPTCHA to verify you are human.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    data.append('g-recaptcha-response', captchaToken);
 
     try {
       const response = await fetch('https://formspree.io/f/mnjbbjgg', {
@@ -31,6 +43,7 @@ export default function ContactPage() {
       if (response.ok) {
         setIsSubmitted(true);
         form.reset();
+        recaptchaRef.current?.reset();
       } else {
         alert("Something went wrong. Please try again or contact us via WhatsApp.");
       }
@@ -86,8 +99,8 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* The Form / Success Message (Right Side) */}
-        <div className="bg-gray-50 p-8 rounded-sm">
+        {/* The Form */}
+        <div className="bg-gray-50 p-8 rounded-sm shadow-sm relative">
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -97,6 +110,14 @@ export default function ContactPage() {
               <input required name="subject" type="text" placeholder="Subject" className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-[#3B1438] outline-none transition-colors text-sm" />
               <textarea required name="message" rows={4} placeholder="Message" className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-[#3B1438] outline-none transition-colors resize-none text-sm"></textarea>
               
+              {/* Enhanced visibility wrapper for reCAPTCHA */}
+              <div className="relative z-10 min-h-[80px] flex justify-center sm:justify-start py-2">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey="6LcNUX4sAAAAAPZp47JVijnuPaKpu_UdewB4Na5D"
+                />
+              </div>
+
               <button 
                 type="submit" 
                 disabled={isSubmitting}
@@ -104,17 +125,7 @@ export default function ContactPage() {
                   isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-90'
                 }`}
               >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Sending...
-                  </>
-                ) : (
-                  "Submit Inquiry"
-                )}
+                {isSubmitting ? "Sending..." : "Submit Inquiry"}
               </button>
             </form>
           ) : (
