@@ -19,25 +19,31 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     const form = e.currentTarget;
-    const data = new FormData(form);
-
     const captchaToken = recaptchaRef.current?.getValue();
     
     if (!captchaToken) {
-      alert("Please complete the reCAPTCHA to verify you are human.");
+      alert("Please complete the reCAPTCHA.");
       setIsSubmitting(false);
       return;
     }
 
-    data.append('g-recaptcha-response', captchaToken);
+    // Task: Create a clean JSON object instead of FormData
+    const formData = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      subject: (form.elements.namedItem("subject") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+      "g-recaptcha-response": captchaToken, // This matches the field Formspree looks for
+    };
 
     try {
       const response = await fetch('https://formspree.io/f/mnjbbjgg', {
         method: 'POST',
-        body: data,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
@@ -45,10 +51,12 @@ export default function ContactPage() {
         form.reset();
         recaptchaRef.current?.reset();
       } else {
-        alert("Something went wrong. Please try again or contact us via WhatsApp.");
+        const result = await response.json();
+        // If it fails, this alert will tell us exactly why Google/Formspree rejected it
+        alert(result.error || "Submission failed. Please check your reCAPTCHA keys.");
       }
     } catch (error) {
-      alert("Network error. Please check your connection.");
+      alert("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
